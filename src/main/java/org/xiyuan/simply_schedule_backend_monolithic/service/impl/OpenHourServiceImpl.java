@@ -25,7 +25,6 @@ public class OpenHourServiceImpl implements OpenHourService {
 
     @Override
     public List<OpenHour> createOpenHours(Long coachId, List<OpenHour> openHours) {
-        openHourRepository.deleteOpenHoursByCoachId(coachId);
         return openHourRepository.saveAll(openHours);
     }
 
