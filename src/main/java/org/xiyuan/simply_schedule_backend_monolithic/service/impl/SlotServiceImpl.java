@@ -27,7 +27,6 @@ public class SlotServiceImpl implements SlotService {
 
     @Override
     public List<Slot> createSlots(Long studentId, Long coachId, List<Slot> slots) {
-        slotRepository.deleteSlotsByStudentIdAndCoachIdAndStatus(studentId, coachId, SlotStatus.SCHEDULING);
         return slotRepository.saveAll(slots);
     }
 
