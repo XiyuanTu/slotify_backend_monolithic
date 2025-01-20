@@ -1,6 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.exception;
 
-import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -39,12 +39,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorDto ErrorDto = new ErrorDto(LocalDateTime.now(), webRequest.getDescription(false), resourceNotFoundException.getMessage());
         return new ResponseEntity<>(ErrorDto, HttpStatus.NOT_FOUND);
     }
-
-//    @ExceptionHandler(AccessDeniedException.class)
-//    public ResponseEntity<ErrorDto> handleAccessDeniedException(AccessDeniedException accessDeniedException, WebRequest webRequest) {
-//        ErrorDto ErrorDto = new ErrorDto(LocalDateTime.now(), webRequest.getDescription(false), accessDeniedException.getMessage());
-//        return new ResponseEntity<>(ErrorDto, HttpStatus.UNAUTHORIZED);
-//    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDto> handleRuntimeException(Exception exception, WebRequest webRequest) {

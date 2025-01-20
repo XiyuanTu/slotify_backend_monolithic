@@ -1,9 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.controller;
 
-import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
-import org.xiyuan.simply_schedule_backend_monolithic.service.SlotService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +14,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.Student;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
+import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
+import org.xiyuan.simply_schedule_backend_monolithic.service.SlotService;
 
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable Long studentId, @PathVariable Long coachId) {
+    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable Long studentId, @PathVariable Long coachId, @CurrentUser Student student) {
         List<Slot> slots = slotService.getSlotsByStudentIdAndCoachId(studentId, coachId);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         // todo: combine with user dao

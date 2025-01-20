@@ -1,9 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.controller;
 
-import org.xiyuan.simply_schedule_backend_monolithic.entity.Appointment;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.AppointmentDto;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
-import org.xiyuan.simply_schedule_backend_monolithic.service.AppointmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +14,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.Appointment;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.AppointmentDto;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
+import org.xiyuan.simply_schedule_backend_monolithic.service.AppointmentService;
 
 import java.util.List;
 
@@ -136,7 +136,6 @@ public class AppointmentController {
     )
     public ResponseEntity<String> updateAppointment(@Valid @RequestBody AppointmentDto appointmentDto) {
         appointmentService.updateAppointment(modelMapper.map(appointmentDto, Appointment.class));
-        System.out.println(2);
         return new ResponseEntity<>("Updated appointment successfully", HttpStatus.OK);
     }
 }
