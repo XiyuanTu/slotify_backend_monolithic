@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.xiyuan.simply_schedule_backend_monolithic.service.StudentService;
+import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
 import java.util.Map;
 
@@ -16,24 +16,23 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 public class OAuth2Controller {
 
-    private final StudentService studentService;
+    private final UserService userService;
 
     @Autowired
-    public OAuth2Controller(StudentService studentService) {
-        this.studentService = studentService;
+    public OAuth2Controller(UserService userService) {
+        this.userService = userService;
     }
 
     @RequestMapping(
             value = "/sign-in/google",
             method = RequestMethod.POST,
             produces = {"application/json"}
-
     )
     public ResponseEntity<Map<String, Object>> createGoogleUser() {
         JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         String bearerToken = jwtAuthenticationToken.getToken().getTokenValue();
         try {
-            studentService.handleGoogleSignIn(bearerToken);
+            userService.handleGoogleSignIn(bearerToken);
             return new ResponseEntity<>(Map.of(
                     "token", bearerToken
             ), HttpStatus.CREATED);

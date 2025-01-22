@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
-import org.xiyuan.simply_schedule_backend_monolithic.entity.Student;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
 import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;

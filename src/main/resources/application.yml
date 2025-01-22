@@ -3,19 +3,19 @@ spring:
     name: simply_schedule_backend_monolithic
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:./data/testdb;AUTO_SERVER=TRUE
     driver-class-name: org.h2.Driver
     username: sa
     password: password
 
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # Options: none, validate, update, create, create-drop
+    show-sql: true     # Show SQL queries in the console
+    properties:
       hibernate:
-        ddl-auto: update # Options: none, validate, update, create, create-drop
-      show-sql: true     # Show SQL queries in the console
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.H2Dialect # Adjust to your database
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect # Adjust to your database
 
   h2:
     console:
@@ -27,6 +27,13 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
+#  sql:
+#    init:
+#      mode: never
 
 server:
   port: 8080
+
+google_client_id:
+  client: 692439382840-504o7a0lrmdf94htqgh2fivar19rj13d.apps.googleusercontent.com
+  admin: 692439382840-idf8gu35b4qsn481gfg0esel9tgmqa3v.apps.googleusercontent.com
