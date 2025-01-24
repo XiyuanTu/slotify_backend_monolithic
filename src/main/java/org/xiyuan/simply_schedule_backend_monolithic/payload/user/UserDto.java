@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @EqualsAndHashCode
 @Data
 @NoArgsConstructor
@@ -16,7 +18,7 @@ import lombok.NoArgsConstructor;
         name = "User"
 )
 public class UserDto {
-    private Long id;
+    private UUID id;
 
     @Schema(
             description = "User's name",
@@ -39,5 +41,4 @@ public class UserDto {
     )
     @NotNull()
     private String picture;
-
 }

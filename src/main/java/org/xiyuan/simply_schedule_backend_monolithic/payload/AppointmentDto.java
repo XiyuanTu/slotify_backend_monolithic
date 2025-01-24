@@ -1,6 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.payload;
 
-import org.xiyuan.simply_schedule_backend_monolithic.constant.AppointmentStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.xiyuan.simply_schedule_backend_monolithic.constant.AppointmentStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
         name = "Appointment"
 )
 public class AppointmentDto {
-    private Long id;
+    private UUID id;
     @Schema(
             description = "Student's id in User table",
             example = "324243252"

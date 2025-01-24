@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -18,13 +19,13 @@ import java.time.LocalDateTime;
         name = "Coaches' available hours"
 )
 public class OpenHourDto {
-    private Long id;
+    private UUID id;
 
     @Schema(
             description = "Coach's id in User table",
             example = "324243252"
     )
-    private Long coachId;
+    private UUID coachId;
 
     @Schema(
             description = "The start of the slot",

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.FrontendSource;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.BaseEntity;
 
+import java.util.UUID;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 //@Entity
@@ -18,9 +20,9 @@ import org.xiyuan.simply_schedule_backend_monolithic.entity.BaseEntity;
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.UUID
     )
-    private Long id;
+    private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;

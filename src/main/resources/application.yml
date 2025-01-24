@@ -9,9 +9,10 @@ spring:
     password: password
 
   jpa:
+    defer-datasource-initialization: true # so that data.sql script is executed after Hibernate is initialized
     hibernate:
       ddl-auto: create-drop # Options: none, validate, update, create, create-drop
-    show-sql: true     # Show SQL queries in the console
+    show-sql: false     # Show SQL queries in the console
     properties:
       hibernate:
         format_sql: true
@@ -27,9 +28,9 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://accounts.google.com
-#  sql:
-#    init:
-#      mode: never
+  sql:
+    init:
+      mode: always
 
 server:
   port: 8080
@@ -37,3 +38,5 @@ server:
 google_client_id:
   client: 692439382840-504o7a0lrmdf94htqgh2fivar19rj13d.apps.googleusercontent.com
   admin: 692439382840-idf8gu35b4qsn481gfg0esel9tgmqa3v.apps.googleusercontent.com
+
+coach_email: xiyuan.tyler@gmail.com

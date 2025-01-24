@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
+
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -15,5 +16,5 @@ import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
         name = "Student"
 )
 public class StudentDto extends UserDto {
-    private Coach coach;
+    private UUID coach;
 }

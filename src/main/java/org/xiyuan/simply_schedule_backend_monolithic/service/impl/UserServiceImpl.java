@@ -1,6 +1,7 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,11 @@ import org.xiyuan.simply_schedule_backend_monolithic.security.GoogleAuthTokenVer
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    @Value("${coach_email}")
+    private String coachEmail;
+
     private final StudentRepository studentRepository;
     private final CoachRepository coachRepository;
     private final GoogleAuthTokenVerifier googleAuthTokenVerifier;
@@ -63,7 +67,10 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AccessDeniedException("Failed to validate JWT."));
         String email = user.getEmail();
         if (FrontendSource.CLIENT.equals(user.getSource())) {
-            studentRepository.findByEmail(email).orElseGet(() -> studentRepository.saveAndFlush((Student) user));
+            Student student = (Student) user;
+            student.setCoach(coachRepository.findByEmail(coachEmail)
+                    .orElseThrow(() -> new ResourceNotFoundException("Coach", "Email", email)));
+            studentRepository.findByEmail(email).orElseGet(() -> studentRepository.saveAndFlush(student));
             return;
         }
         coachRepository.findByEmail(email).orElseGet(() -> coachRepository.saveAndFlush((Coach) user));
@@ -76,11 +83,15 @@ public class UserServiceImpl implements UserService {
                     .orElseThrow(() -> new RuntimeException("Failed to validate JWT."));
             String email = user.getEmail();
             if (FrontendSource.CLIENT.equals(user.getSource())) {
-                return studentRepository.findByEmail(email)
+                Student student = studentRepository.findByEmail(email)
                         .orElseThrow(() -> new ResourceNotFoundException("Student", "Email", email));
+                student.setSource(FrontendSource.CLIENT);
+                return student;
             }
-            return coachRepository.findByEmail(email)
+            Coach coach = coachRepository.findByEmail(email)
                     .orElseThrow(() -> new ResourceNotFoundException("Coach", "Email", email));
+            coach.setSource(FrontendSource.ADMIN);
+            return coach;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

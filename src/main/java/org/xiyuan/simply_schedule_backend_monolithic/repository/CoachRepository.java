@@ -6,9 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface CoachRepository extends JpaRepository<Coach, Long> {
+public interface CoachRepository extends JpaRepository<Coach, UUID> {
     Optional<Coach> findByEmail(String email);
 
     @Transactional

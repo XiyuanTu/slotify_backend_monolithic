@@ -3,16 +3,20 @@ package org.xiyuan.simply_schedule_backend_monolithic.service;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SlotService {
-    List<Slot> getSlotsByStudentIdAndCoachId(Long studentId, Long coachId);
-    List<Slot> getSlotsByCoachId(Long coachId);
-    Slot getSlotById(Long id);
-    List<Slot> createSlots(Long studentId, Long coachId, List<Slot> slots);
+    List<Slot> getSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId);
 
-    void deleteSlotById(Long id);
+    List<Slot> getSlotsByCoachId(UUID coachId);
+
+    Slot getSlotById(UUID id);
+
+    List<Slot> createSlots(UUID studentId, UUID coachId, List<Slot> slots);
+
+    void deleteSlotById(UUID id);
 
     void updateSlot(Slot slot);
 
-    void deleteSlotsByStudentIdAndCoachId(Long studentId, Long coachId);
+    void deleteSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId);
 }

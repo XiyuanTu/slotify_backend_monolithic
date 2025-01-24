@@ -22,6 +22,7 @@ import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
 import org.xiyuan.simply_schedule_backend_monolithic.service.SlotService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/slot", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -56,7 +57,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable Long studentId, @PathVariable Long coachId, @CurrentUser Student student) {
+    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId, @CurrentUser Student student) {
         List<Slot> slots = slotService.getSlotsByStudentIdAndCoachId(studentId, coachId);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         // todo: combine with user dao
@@ -85,7 +86,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByCoachId(@PathVariable Long coachId) {
+    public ResponseEntity<List<SlotDto>> getSlotsByCoachId(@PathVariable UUID coachId) {
         List<Slot> slots = slotService.getSlotsByCoachId(coachId);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         // todo: combine with user dao
@@ -110,7 +111,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> createSlots(@PathVariable Long studentId, @PathVariable Long coachId, @Valid @RequestBody List<SlotDto> slotDtos) {
+    public ResponseEntity<List<SlotDto>> createSlots(@PathVariable UUID studentId, @PathVariable UUID coachId, @Valid @RequestBody List<SlotDto> slotDtos) {
         List<Slot> slots = slotDtos.stream().map(slotDto -> {
             slotDto.setStudentId(studentId);
             slotDto.setCoachId(coachId);
@@ -143,7 +144,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<String> deleteSlotById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSlotById(@PathVariable UUID id) {
         slotService.deleteSlotById(id);
         return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
     }
@@ -166,7 +167,7 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<String> deleteSlotsByStudentIdAndCoachId(@PathVariable Long studentId, @PathVariable Long coachId) {
+    public ResponseEntity<String> deleteSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId) {
         slotService.deleteSlotsByStudentIdAndCoachId(studentId, coachId);
         return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
     }

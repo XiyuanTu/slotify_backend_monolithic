@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -21,4 +22,8 @@ public class Coach extends User {
     @Column(nullable = false)
     @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL)
     private List<Student> students;
+
+    public List<Student> getStudents() {
+        return this.students == null ? new ArrayList<>() : students;
+    }
 }

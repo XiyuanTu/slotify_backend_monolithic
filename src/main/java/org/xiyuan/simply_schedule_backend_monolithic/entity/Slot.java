@@ -1,13 +1,14 @@
 package org.xiyuan.simply_schedule_backend_monolithic.entity;
 
-import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -18,15 +19,15 @@ public class Slot extends BaseEntity {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.UUID
     )
-    private Long id;
+    private UUID id;
 
     @Column(name = "student_id", nullable = false)
-    private Long studentId;
+    private UUID studentId;
 
     @Column(name = "coach_id", nullable = false)
-    private Long coachId;
+    private UUID coachId;
 
     @Column(name = "start_at", nullable = false)
     private LocalDateTime startAt;

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Student extends User {
     @ManyToOne
-    @JoinColumn(name = "coach")
+    @JoinColumn(name = "coach", nullable = false)
     // for now, each student has only one coach
     private Coach coach;
 }

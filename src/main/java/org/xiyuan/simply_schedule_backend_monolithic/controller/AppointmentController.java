@@ -20,6 +20,7 @@ import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.service.AppointmentService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/appointment", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -54,7 +55,7 @@ public class AppointmentController {
             )
     }
     )
-    public ResponseEntity<List<AppointmentDto>> getAppointmentsByCoachId(@PathVariable Long coachId) {
+    public ResponseEntity<List<AppointmentDto>> getAppointmentsByCoachId(@PathVariable UUID coachId) {
         List<Appointment> appointments = appointmentService.getAppointmentsByCoachId(coachId);
         List<AppointmentDto> appointmentDtos = appointments.stream().map(appointment -> modelMapper.map(appointment, AppointmentDto.class)).toList();
         // todo: combine with user dao
@@ -107,7 +108,7 @@ public class AppointmentController {
             )
     }
     )
-    public ResponseEntity<String> deleteAppointmentById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteAppointmentById(@PathVariable UUID id) {
         appointmentService.deleteAppointmentById(id);
         return new ResponseEntity<>("Deleted appointment successfully", HttpStatus.OK);
     }

@@ -1,9 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.controller;
 
-import org.xiyuan.simply_schedule_backend_monolithic.entity.OpenHour;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
-import org.xiyuan.simply_schedule_backend_monolithic.payload.OpenHourDto;
-import org.xiyuan.simply_schedule_backend_monolithic.service.OpenHourService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,8 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.OpenHour;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.OpenHourDto;
+import org.xiyuan.simply_schedule_backend_monolithic.service.OpenHourService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/v1/open-hour", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -54,7 +55,7 @@ public class OpenHourController {
             )
     }
     )
-    public ResponseEntity<List<OpenHourDto>> getOpenHoursByCoachId(@PathVariable Long coachId) {
+    public ResponseEntity<List<OpenHourDto>> getOpenHoursByCoachId(@PathVariable UUID coachId) {
         List<OpenHour> openHours = openHourService.getOpenHoursByCoachId(coachId);
         List<OpenHourDto> openHourDtos = openHours.stream().map(openHour -> modelMapper.map(openHour, OpenHourDto.class)).toList();
         // todo: combine with user dao
@@ -79,7 +80,7 @@ public class OpenHourController {
             )
     }
     )
-    public ResponseEntity<List<OpenHourDto>> createOpenHours(@PathVariable Long coachId, @Valid @RequestBody List<OpenHourDto> openHourDtos) {
+    public ResponseEntity<List<OpenHourDto>> createOpenHours(@PathVariable UUID coachId, @Valid @RequestBody List<OpenHourDto> openHourDtos) {
         List<OpenHour> openHours = openHourDtos.stream().map(openHourDto -> {
             openHourDto.setCoachId(coachId);
             return modelMapper.map(openHourDto, OpenHour.class);
@@ -111,7 +112,7 @@ public class OpenHourController {
             )
     }
     )
-    public ResponseEntity<String> deleteOpenHourById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteOpenHourById(@PathVariable UUID id) {
         openHourService.deleteOpenHourById(id);
         return new ResponseEntity<>("Deleted open hour successfully", HttpStatus.OK);
     }
@@ -134,7 +135,7 @@ public class OpenHourController {
             )
     }
     )
-    public ResponseEntity<String> deleteOpenHoursByCoachId(@PathVariable Long coachId) {
+    public ResponseEntity<String> deleteOpenHoursByCoachId(@PathVariable UUID coachId) {
         openHourService.deleteOpenHoursByCoachId(coachId);
         return new ResponseEntity<>("Deleted open hours successfully", HttpStatus.OK);
     }

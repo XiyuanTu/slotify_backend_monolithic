@@ -7,22 +7,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OpenHour {
+public class OpenHour extends BaseEntity {
 
     @Id
     @GeneratedValue(
-            strategy = GenerationType.IDENTITY
+            strategy = GenerationType.UUID
     )
-    private Long id;
+    private UUID id;
 
     @Column(name = "coach_id", nullable = false)
-    private Long coachId;
+    private UUID coachId;
 
     @Column(name = "start_at", nullable = false)
     private LocalDateTime startAt;
