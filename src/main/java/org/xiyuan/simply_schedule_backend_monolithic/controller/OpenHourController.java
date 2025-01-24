@@ -33,7 +33,7 @@ public class OpenHourController {
     private final OpenHourService openHourService;
     private final ModelMapper modelMapper;
 
-    @GetMapping("/{coachId}")
+    @GetMapping("/coach/{coachId}")
     @Operation(
             summary = "Get all the open hours for some coach"
     )
@@ -62,7 +62,7 @@ public class OpenHourController {
         return new ResponseEntity<>(openHourDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/{coachId}")
+    @PostMapping("/coach/{coachId}")
     @Operation(
             summary = "Create open hours"
     )

@@ -15,10 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
-import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
-import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
 import org.xiyuan.simply_schedule_backend_monolithic.service.SlotService;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class SlotController {
     private final SlotService slotService;
     private final ModelMapper modelMapper;
 
-    @GetMapping("/{studentId}/{coachId}")
+    @GetMapping("/student/{studentId}/coach/{coachId}")
     @Operation(
             summary = "Get all the time slots for some student and some coach"
     )
@@ -57,14 +55,13 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId, @CurrentUser Student student) {
+    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId) {
         List<Slot> slots = slotService.getSlotsByStudentIdAndCoachId(studentId, coachId);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
-        // todo: combine with user dao
         return new ResponseEntity<>(slotDtos, HttpStatus.OK);
     }
 
-    @GetMapping("/{coachId}")
+    @GetMapping("/coach/{coachId}")
     @Operation(
             summary = "Get all the time slots for some coach"
     )
@@ -89,11 +86,10 @@ public class SlotController {
     public ResponseEntity<List<SlotDto>> getSlotsByCoachId(@PathVariable UUID coachId) {
         List<Slot> slots = slotService.getSlotsByCoachId(coachId);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
-        // todo: combine with user dao
         return new ResponseEntity<>(slotDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/{studentId}/{coachId}")
+    @PostMapping("/student/{studentId}/coach/{coachId}")
     @Operation(
             summary = "Create time slots"
     )
@@ -149,7 +145,7 @@ public class SlotController {
         return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/{studentId}/{coachId}")
+    @DeleteMapping("/student/{studentId}/coach/{coachId}")
     @Operation(
             summary = "Delete slots by studentId and coachId"
     )
