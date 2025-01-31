@@ -28,23 +28,23 @@ import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
 @AllArgsConstructor
 @Validated
 @Tag(
-        name = "CRUD for students"
+        name = "CRUD for logged in user"
 )
 public class UserController {
     private final ModelMapper modelMapper;
 
     @GetMapping("")
     @Operation(
-            summary = "Get student by email"
+            summary = "Get logged in user by email"
     )
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Student fetched"
+                    description = "User fetched"
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Student not found"
+                    description = "User not found"
             ),
             @ApiResponse(
                     responseCode = "500",

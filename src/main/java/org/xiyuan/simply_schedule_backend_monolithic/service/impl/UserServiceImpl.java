@@ -12,9 +12,13 @@ import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
 import org.xiyuan.simply_schedule_backend_monolithic.exception.ResourceNotFoundException;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.CoachRepository;
+import org.xiyuan.simply_schedule_backend_monolithic.repository.SlotRepository;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.StudentRepository;
 import org.xiyuan.simply_schedule_backend_monolithic.security.GoogleAuthTokenVerifier;
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +28,27 @@ public class UserServiceImpl implements UserService {
 
     private final StudentRepository studentRepository;
     private final CoachRepository coachRepository;
+    private final SlotRepository slotRepository;
     private final GoogleAuthTokenVerifier googleAuthTokenVerifier;
+
+    @Override
+    public Student getStudentById(UUID studentId) {
+        return studentRepository.findById(studentId).orElseThrow(() -> new ResourceNotFoundException("Student", "id", studentId.toString()));
+    }
 
     @Override
     public Student getStudentByEmail(String email) {
         return studentRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Student", "email", email));
+    }
+
+    @Override
+    public List<Student> getStudentsByCoachId(UUID coachId) {
+        return studentRepository.findByCoachId(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()));
+    }
+
+    @Override
+    public List<Student> getSchedulingStudents(UUID coachId) {
+        return slotRepository.findStudentsWithSchedulingSlots(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()));
     }
 
     @Override

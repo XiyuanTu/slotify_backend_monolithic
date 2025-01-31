@@ -16,5 +16,5 @@ import java.util.UUID;
         name = "Student"
 )
 public class StudentDto extends UserDto {
-    private UUID coach;
+    private UUID coachId;
 }

@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -23,11 +25,13 @@ public class Slot extends BaseEntity {
     )
     private UUID id;
 
-    @Column(name = "student_id", nullable = false)
-    private UUID studentId;
+    @ManyToOne
+    @JoinColumn(name = "student", nullable = false)
+    private Student student;
 
-    @Column(name = "coach_id", nullable = false)
-    private UUID coachId;
+    @ManyToOne
+    @JoinColumn(name = "coach", nullable = false)
+    private Coach coach;
 
     @Column(name = "start_at", nullable = false)
     private LocalDateTime startAt;
