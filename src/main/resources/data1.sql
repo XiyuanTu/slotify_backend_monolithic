@@ -3,7 +3,7 @@ SET @coach_id = (SELECT ID
                  WHERE EMAIL = 'xiyuan.tyler@gmail.com');
 
 // add 50 students
-INSERT INTO PUBLIC.STUDENT (CREATED_AT, ID, UPDATED_AT, CREATED_BY, EMAIL, NAME, PICTURE, UPDATED_BY, COACH)
+INSERT INTO PUBLIC.STUDENT (CREATED_AT, ID, UPDATED_AT, CREATED_BY, EMAIL, NAME, PICTURE, UPDATED_BY, COACH, LOCATION)
 SELECT null,
        UUID(),
        null,
@@ -12,7 +12,8 @@ SELECT null,
        CONCAT('test', n),
        '',
        null,
-       @coach_id
+       @coach_id,
+       'MILPITAS'
 FROM (SELECT ROW_NUMBER() OVER () AS n FROM SYSTEM_RANGE(1, 50)) numbers;
 
 // add open horus for the next 10 days

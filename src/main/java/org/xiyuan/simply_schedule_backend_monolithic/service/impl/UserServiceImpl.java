@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.FrontendSource;
+import org.xiyuan.simply_schedule_backend_monolithic.constant.Location;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
@@ -88,6 +89,7 @@ public class UserServiceImpl implements UserService {
         String email = user.getEmail();
         if (FrontendSource.CLIENT.equals(user.getSource())) {
             Student student = (Student) user;
+            student.setLocation(Location.MILPITAS);
             student.setCoach(coachRepository.findByEmail(coachEmail)
                     .orElseThrow(() -> new ResourceNotFoundException("Coach", "Email", email)));
             studentRepository.findByEmail(email).orElseGet(() -> studentRepository.saveAndFlush(student));
