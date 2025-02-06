@@ -39,5 +39,5 @@ SELECT null,
        s.id,
        null,
        null,
-       'SCHEDULING'
+       'AVAILABLE'
 FROM student s;

@@ -24,13 +24,22 @@ public interface SlotRepository extends JpaRepository<Slot, UUID> {
     void deleteSlotsByStudentIdAndCoachIdAndStatus(UUID studentId, UUID coachId, SlotStatus status);
 
     @Query("""
-                SELECT DISTINCT s.student
-                FROM Slot s
-                WHERE s.coach.id = :coachId
-                  AND s.startAt > CURRENT_TIMESTAMP
-                  AND s.status = 'SCHEDULING'
+             SELECT DISTINCT s.student
+              FROM Slot s
+              WHERE s.coach.id = :coachId
+                AND s.startAt > CURRENT_TIMESTAMP
+                AND s.status = "AVAILABLE"
+                AND s.student NOT IN (
+                    SELECT s2.student
+                    FROM Slot s2
+                    WHERE s2.coach.id = :coachId
+                      AND s2.status IN (
+                              org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus.PENDING,
+                              org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus.APPOINTMENT
+                          )
+                )
             """)
-    Optional<List<Student>> findStudentsWithSchedulingSlots(
+    Optional<List<Student>> findAvailableStudents(
             @Param("coachId") UUID coachId
     );
 }

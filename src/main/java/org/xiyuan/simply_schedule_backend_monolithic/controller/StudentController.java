@@ -63,9 +63,9 @@ public class StudentController {
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
     }
 
-    @GetMapping("/coach/{coachId}/scheduling")
+    @GetMapping("/coach/{coachId}/available")
     @Operation(
-            summary = "Get students that have scheduling slots by coachId"
+            summary = "Get students who can have an appointment"
     )
     @ApiResponses({
             @ApiResponse(
@@ -85,8 +85,8 @@ public class StudentController {
             )
     }
     )
-    public ResponseEntity<List<StudentDto>> getSchedulingStudents(@PathVariable UUID coachId) {
-        List<Student> students = userService.getSchedulingStudents(coachId);
+    public ResponseEntity<List<StudentDto>> getAvailableStudents(@PathVariable UUID coachId) {
+        List<Student> students = userService.getAvailableStudents(coachId);
         List<StudentDto> studentDtos = students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList();
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
     }

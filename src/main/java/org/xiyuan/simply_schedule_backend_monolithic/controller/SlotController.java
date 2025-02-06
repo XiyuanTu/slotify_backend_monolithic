@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
@@ -89,7 +90,7 @@ public class SlotController {
         return new ResponseEntity<>(slotDtos, HttpStatus.OK);
     }
 
-    @PostMapping("/student/{studentId}/coach/{coachId}")
+    @PostMapping("")
     @Operation(
             summary = "Create time slots"
     )
@@ -107,13 +108,9 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> createSlots(@PathVariable UUID studentId, @PathVariable UUID coachId, @Valid @RequestBody List<SlotDto> slotDtos) {
-        List<Slot> slots = slotDtos.stream().map(slotDto -> {
-            slotDto.setStudentId(studentId);
-            slotDto.setCoachId(coachId);
-            return modelMapper.map(slotDto, Slot.class);
-        }).toList();
-        List<Slot> savedSlots = slotService.createSlots(studentId, coachId, slots);
+    public ResponseEntity<List<SlotDto>> createSlots(@Valid @RequestBody List<SlotDto> slotDtos) {
+        List<Slot> slots = slotDtos.stream().map(slotDto -> modelMapper.map(slotDto, Slot.class)).toList();
+        List<Slot> savedSlots = slotService.createSlots(slots);
         List<SlotDto> slotDtoResponse = savedSlots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         return new ResponseEntity<>(slotDtoResponse, HttpStatus.CREATED);
     }
@@ -145,32 +142,32 @@ public class SlotController {
         return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
     }
 
-    @DeleteMapping("/student/{studentId}/coach/{coachId}")
-    @Operation(
-            summary = "Delete slots by studentId and coachId"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Time slots deleted"
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "HTTP Status Internal Server Error",
-                    content = @Content(
-                            schema = @Schema(implementation = ErrorDto.class)
-                    )
-            )
-    }
-    )
-    public ResponseEntity<String> deleteSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId) {
-        slotService.deleteSlotsByStudentIdAndCoachId(studentId, coachId);
-        return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
-    }
+//    @DeleteMapping("/student/{studentId}/coach/{coachId}")
+//    @Operation(
+//            summary = "Delete slots by studentId and coachId"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Time slots deleted"
+//            ),
+//            @ApiResponse(
+//                    responseCode = "500",
+//                    description = "HTTP Status Internal Server Error",
+//                    content = @Content(
+//                            schema = @Schema(implementation = ErrorDto.class)
+//                    )
+//            )
+//    }
+//    )
+//    public ResponseEntity<String> deleteSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId) {
+//        slotService.deleteSlotsByStudentIdAndCoachId(studentId, coachId);
+//        return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
+//    }
 
-    @PutMapping()
+    @PutMapping("/{id}")
     @Operation(
-            summary = "Update a time slot"
+            summary = "Update a time slot's status"
     )
     @ApiResponses({
             @ApiResponse(
@@ -190,10 +187,8 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<String> updateSlot(@Valid @RequestBody SlotDto slotDto) {
-        slotService.updateSlot(modelMapper.map(slotDto, Slot.class));
-        return new ResponseEntity<>("Updated slot successfully", HttpStatus.OK);
+    public ResponseEntity<SlotDto> updateSlotStatus(@PathVariable UUID id, @RequestParam SlotStatus status) {
+        Slot slot = slotService.updateSlotStatus(id, status);
+        return new ResponseEntity<>(modelMapper.map(slot, SlotDto.class), HttpStatus.OK);
     }
-
-
 }

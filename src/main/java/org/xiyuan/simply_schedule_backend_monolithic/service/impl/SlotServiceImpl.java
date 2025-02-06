@@ -27,7 +27,7 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
-    public List<Slot> createSlots(UUID studentId, UUID coachId, List<Slot> slots) {
+    public List<Slot> createSlots(List<Slot> slots) {
         return slotRepository.saveAll(slots);
     }
 
@@ -43,13 +43,14 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
-    public void updateSlot(Slot slot) {
-        getSlotById(slot.getId());
-        slotRepository.save(slot);
+    public Slot updateSlotStatus(UUID id, SlotStatus status) {
+        Slot slot = slotRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Slot", "id", String.valueOf(id)));
+        slot.setStatus(status);
+        return slotRepository.save(slot);
     }
 
     @Override
     public void deleteSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId) {
-        slotRepository.deleteSlotsByStudentIdAndCoachIdAndStatus(studentId, coachId, SlotStatus.SCHEDULING);
+        slotRepository.deleteSlotsByStudentIdAndCoachIdAndStatus(studentId, coachId, SlotStatus.AVAILABLE);
     }
 }

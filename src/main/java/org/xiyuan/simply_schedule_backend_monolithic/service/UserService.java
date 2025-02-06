@@ -14,7 +14,7 @@ public interface UserService {
 
     List<Student> getStudentsByCoachId(UUID coachId);
 
-    List<Student> getSchedulingStudents(UUID coachId);
+    List<Student> getAvailableStudents(UUID coachId);
 
     Coach getCoachByEmail(String email);
 

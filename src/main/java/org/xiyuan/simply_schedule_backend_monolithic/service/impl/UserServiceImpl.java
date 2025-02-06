@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Student> getSchedulingStudents(UUID coachId) {
-        return slotRepository.findStudentsWithSchedulingSlots(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()));
+    public List<Student> getAvailableStudents(UUID coachId) {
+        return slotRepository.findAvailableStudents(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()));
     }
 
     @Override
