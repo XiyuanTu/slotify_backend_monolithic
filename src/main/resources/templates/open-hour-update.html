@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es-ES" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Slotify</title>
+</head>
+<body>
+<p>Hi <span th:text="${studentName}">Student</span>,</p>
+
+<p><strong th:text="${coachName}">Coach</strong> has updated their open hours. You can visit the <a
+        th:href="@{${websiteUrl}}">website</a> and schedule classes!
+
+<p>Thank you,</p>
+<p><strong>Slotify</strong></p>
+</body>
+</html>

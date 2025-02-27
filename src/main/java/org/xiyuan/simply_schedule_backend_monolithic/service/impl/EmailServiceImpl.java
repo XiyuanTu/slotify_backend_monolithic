@@ -40,6 +40,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -67,6 +68,33 @@ public class EmailServiceImpl implements EmailService {
             case REJECTED -> sendRejectedEmail(slot);
             case CANCELLED -> sendCancelledEmail(slot);
             default -> System.out.println("unexpected status");
+        }
+    }
+
+    @Override
+    public void sendOpenHourUpdateEmail(Coach coach) throws MessagingException, IOException {
+        List<Student> students = coach.getStudents();
+        for (Student student : students) {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            String studentName = WordUtils.capitalizeFully(coach.getName().split(" ")[0].toLowerCase());
+            String coachName = WordUtils.capitalizeFully(coach.getName().split(" ")[0].toLowerCase());
+            helper.setFrom(new InternetAddress(senderEmail, "Slotify"));
+            helper.setTo(student.getEmail());
+            helper.setSubject(coachName + " has updated their open hours!");
+
+            Map<String, Object> emailVariables = new HashMap<>();
+            emailVariables.put("studentName", studentName);
+            emailVariables.put("coachName", coachName);
+            emailVariables.put("websiteUrl", studentFrontendUrl);
+
+            Context context = new Context();
+            context.setVariables(emailVariables);
+            String emailContent = templateEngine.process("open-hour-update", context);
+
+            helper.setText(emailContent, true);
+
+            mailSender.send(message);
         }
     }
 
