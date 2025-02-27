@@ -21,7 +21,9 @@ import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.user.StudentDto;
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -86,8 +88,13 @@ public class StudentController {
     }
     )
     public ResponseEntity<List<StudentDto>> getAvailableStudents(@PathVariable UUID coachId) {
-        List<Student> students = userService.getAvailableStudents(coachId);
-        List<StudentDto> studentDtos = students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList();
+        Map<Student, Long> students = userService.getAvailableStudents(coachId);
+        List<StudentDto> studentDtos = new ArrayList<>();
+        students.forEach((student, count) -> {
+            StudentDto studentDto = modelMapper.map(student, StudentDto.class);
+            studentDto.setNumOfClassCanBeScheduled(count);
+            studentDtos.add(studentDto);
+        });
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
     }
 

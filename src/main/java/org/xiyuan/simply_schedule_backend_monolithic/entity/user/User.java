@@ -12,10 +12,8 @@ import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-//@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @MappedSuperclass
 public class User extends BaseEntity {
     @Id

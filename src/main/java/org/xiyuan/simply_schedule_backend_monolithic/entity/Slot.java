@@ -1,10 +1,7 @@
 package org.xiyuan.simply_schedule_backend_monolithic.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
@@ -12,6 +9,7 @@ import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @NoArgsConstructor
@@ -25,13 +23,16 @@ public class Slot extends BaseEntity {
     )
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student", nullable = false)
     private Student student;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coach", nullable = false)
     private Coach coach;
+
+    @Column(name = "class_id", nullable = false)
+    private UUID classId = UUID.randomUUID();
 
     @Column(name = "start_at", nullable = false)
     private LocalDateTime startAt;

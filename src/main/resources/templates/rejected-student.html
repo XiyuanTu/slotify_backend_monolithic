@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es-ES" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Slotify</title>
+</head>
+<body>
+<p>Hi <span th:text="${studentName}">Student</span>,</p>
+
+<p>Your have successfully rejected the class with <strong th:text="${coachName}">Coach</strong> scheduled at <strong
+        th:text="${time}">Time</strong>.</p>
+
+<p>If you need to re-schedule, please visit the <a th:href="@{${websiteUrl}}">website</a> and reselect your available
+    hours.</p>
+
+<p>Thank you,</p>
+<p><strong>Slotify</strong></p>
+</body>
+</html>

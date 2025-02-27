@@ -19,7 +19,9 @@ import org.xiyuan.simply_schedule_backend_monolithic.security.GoogleAuthTokenVer
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Coach getCoachById(UUID coachId) {
+        return coachRepository.findById(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "id", coachId.toString()));
+    }
+
+    @Override
     public Student getStudentByEmail(String email) {
         return studentRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Student", "email", email));
     }
@@ -48,8 +55,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Student> getAvailableStudents(UUID coachId) {
-        return slotRepository.findAvailableStudents(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()));
+    public Map<Student, Long> getAvailableStudents(UUID coachId) {
+        return slotRepository.findAvailableStudents(coachId).orElseThrow(() -> new ResourceNotFoundException("Student", "coachId", coachId.toString()))
+                .stream()
+                .collect(Collectors.toMap(
+                        row -> (Student) row[0],
+                        row -> (Long) row[1]
+                ));
     }
 
     @Override

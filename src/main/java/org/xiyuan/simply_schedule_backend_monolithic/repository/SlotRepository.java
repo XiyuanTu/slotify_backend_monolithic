@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
-import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,22 +23,18 @@ public interface SlotRepository extends JpaRepository<Slot, UUID> {
     void deleteSlotsByStudentIdAndCoachIdAndStatus(UUID studentId, UUID coachId, SlotStatus status);
 
     @Query("""
-             SELECT DISTINCT s.student
-              FROM Slot s
-              WHERE s.coach.id = :coachId
-                AND s.startAt > CURRENT_TIMESTAMP
-                AND s.status = "AVAILABLE"
-                AND s.student NOT IN (
-                    SELECT s2.student
-                    FROM Slot s2
-                    WHERE s2.coach.id = :coachId
-                      AND s2.status IN (
-                              org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus.PENDING,
-                              org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus.APPOINTMENT
-                          )
+                SELECT s.student, COUNT(DISTINCT s.classId)
+                FROM Slot s
+                WHERE s.coach.id = :coachId
+                AND NOT EXISTS (
+                  SELECT 1
+                  FROM Slot s2
+                  WHERE s2.classId = s.classId
+                    AND (s2.status = 'PENDING' or s2.status = 'APPOINTMENT')
                 )
+                GROUP BY s.student
             """)
-    Optional<List<Student>> findAvailableStudents(
+    Optional<List<Object[]>> findAvailableStudents(
             @Param("coachId") UUID coachId
     );
 }

@@ -19,4 +19,5 @@ import java.util.UUID;
 public class StudentDto extends UserDto {
     private UUID coachId;
     private Location location;
+    private Long numOfClassCanBeScheduled;
 }

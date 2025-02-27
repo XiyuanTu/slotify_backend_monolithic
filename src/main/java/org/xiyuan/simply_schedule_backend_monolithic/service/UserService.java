@@ -6,15 +6,18 @@ import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface UserService {
     Student getStudentById(UUID studentId);
+
+    Coach getCoachById(UUID coachId);
     Student getStudentByEmail(String email);
 
     List<Student> getStudentsByCoachId(UUID coachId);
 
-    List<Student> getAvailableStudents(UUID coachId);
+    Map<Student, Long> getAvailableStudents(UUID coachId);
 
     Coach getCoachByEmail(String email);
 

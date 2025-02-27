@@ -32,6 +32,22 @@ spring:
     init:
       mode: always
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: slotify.txy@gmail.com
+    password: appzyliahuxzrrpp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
 server:
   port: 8080
 
@@ -40,3 +56,7 @@ google_client_id:
   admin: 692439382840-idf8gu35b4qsn481gfg0esel9tgmqa3v.apps.googleusercontent.com
 
 coach_email: xiyuan.tyler@gmail.com
+
+frontend_url:
+  student: http://localhost:3000/
+  coach: http://localhost:3001/

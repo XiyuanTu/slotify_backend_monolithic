@@ -191,4 +191,35 @@ public class SlotController {
         Slot slot = slotService.updateSlotStatus(id, status);
         return new ResponseEntity<>(modelMapper.map(slot, SlotDto.class), HttpStatus.OK);
     }
+
+//    @GetMapping("/{id}/token/{token}")
+//    @Operation(
+//            summary = "Update a time slot's status via email"
+//    )
+//    @ApiResponses({
+//            @ApiResponse(
+//                    responseCode = "200",
+//                    description = "Time slot updated"
+//            ),
+//            @ApiResponse(
+//                    responseCode = "404",
+//                    description = "Time slot not found"
+//            ),
+//            @ApiResponse(
+//                    responseCode = "500",
+//                    description = "HTTP Status Internal Server Error",
+//                    content = @Content(
+//                            schema = @Schema(implementation = ErrorDto.class)
+//                    )
+//            )
+//    }
+//    )
+//    public String updateSlotStatusViaEmail(@PathVariable UUID id, @PathVariable String token, @RequestParam SlotStatus status, Model model) {
+//        String message = slotService.updateSlotStatusViaEmail(id, token, status);
+//        if (message != null) {
+//            model.addAttribute("message", message);
+//            return "action-success";
+//        }
+//        return "token-invalid";
+//    }
 }

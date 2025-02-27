@@ -1,0 +1,27 @@
+SET @coach_id = (SELECT ID
+                 FROM PUBLIC.COACH
+                 WHERE EMAIL = 'xiyuan.tyler@gmail.com');
+
+SET @test_id = (SELECT ID
+                FROM PUBLIC.STUDENT
+                WHERE NAME = 'Test');
+SET @test_id1 = (SELECT ID
+                 FROM PUBLIC.STUDENT
+                 WHERE NAME = 'Test1');
+
+INSERT INTO PUBLIC.SLOT (CREATED_AT, END_AT, START_AT, UPDATED_AT, CLASS_ID, COACH, ID, STUDENT, CREATED_BY, UPDATED_BY,
+                         STATUS)
+VALUES (null, '2025-02-26 17:30:00.000000', '2025-02-26 16:30:00.000000', null, '4741658f-82f7-4041-91a2-d20bc4135b25',
+        @coach_id, '29fe4b24-f65e-4c24-bc49-172628679964', @test_id, null, null, 'AVAILABLE');
+INSERT INTO PUBLIC.SLOT (CREATED_AT, END_AT, START_AT, UPDATED_AT, CLASS_ID, COACH, ID, STUDENT, CREATED_BY, UPDATED_BY,
+                         STATUS)
+VALUES (null, '2025-02-26 18:30:00.000000', '2025-02-26 17:30:00.000000', null, '4741658f-82f7-4041-91a2-d20bc4135b35',
+        @coach_id, '29fe4b24-f65e-4c24-bc49-172628679174', @test_id, null, null, 'AVAILABLE');
+INSERT INTO PUBLIC.SLOT (CREATED_AT, END_AT, START_AT, UPDATED_AT, CLASS_ID, COACH, ID, STUDENT, CREATED_BY, UPDATED_BY,
+                         STATUS)
+VALUES (null, '2025-02-26 20:30:00.000000', '2025-02-26 19:30:00.000000', null, '4741658f-82f7-4041-91a2-d20bc4135b45',
+        @coach_id, '29fe4b24-f65e-4c24-bc49-172628649974', @test_id, null, null, 'AVAILABLE');
+INSERT INTO PUBLIC.SLOT (CREATED_AT, END_AT, START_AT, UPDATED_AT, CLASS_ID, COACH, ID, STUDENT, CREATED_BY, UPDATED_BY,
+                         STATUS)
+VALUES (null, '2025-02-26 21:30:00.000000', '2025-02-26 20:30:00.000000', null, '4741658f-82f7-4041-91a2-d20bc4135b55',
+        @coach_id, '29fe4b24-f65e-4c24-bc49-172625679974', @test_id, null, null, 'AVAILABLE');
