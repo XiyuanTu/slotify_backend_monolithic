@@ -23,11 +23,11 @@ public class Slot extends BaseEntity {
     )
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "student", nullable = false)
     private Student student;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "coach", nullable = false)
     private Coach coach;
 
@@ -43,4 +43,10 @@ public class Slot extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SlotStatus status;
+
+    @Column(name = "coach_deleted", nullable = false)
+    private Boolean coachDeleted;
+
+    @Column(name = "student_deleted", nullable = false)
+    private Boolean studentDeleted;
 }

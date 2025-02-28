@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
 
@@ -19,7 +18,6 @@ public interface SlotRepository extends JpaRepository<Slot, UUID> {
 
     Optional<List<Slot>> findSlotsByCoachId(UUID coachId);
 
-    @Transactional
     void deleteSlotsByStudentIdAndCoachIdAndStatus(UUID studentId, UUID coachId, SlotStatus status);
 
     @Query("""

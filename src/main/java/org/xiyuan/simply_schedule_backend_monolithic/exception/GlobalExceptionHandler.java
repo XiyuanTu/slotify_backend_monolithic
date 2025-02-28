@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatusCode status, @NonNull WebRequest request) {
         Map<String, String> validationErrors = new HashMap<>();
         List<ObjectError> validationErrorList = ex.getBindingResult().getAllErrors();
 
@@ -38,6 +39,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDto> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException, WebRequest webRequest) {
         ErrorDto ErrorDto = new ErrorDto(LocalDateTime.now(), webRequest.getDescription(false), resourceNotFoundException.getMessage());
         return new ResponseEntity<>(ErrorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(SlotStatusStaleException.class)
+    public ResponseEntity<ErrorDto> handleSlotStatusStaleException(SlotStatusStaleException slotStatusStaleException, WebRequest webRequest) {
+        ErrorDto ErrorDto = new ErrorDto(LocalDateTime.now(), webRequest.getDescription(false), slotStatusStaleException.getMessage());
+        return new ResponseEntity<>(ErrorDto, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)

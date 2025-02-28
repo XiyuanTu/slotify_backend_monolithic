@@ -29,7 +29,7 @@ SELECT null,
 FROM (SELECT ROW_NUMBER() OVER () AS n FROM SYSTEM_RANGE(0, 9)) numbers;
 
 insert into SLOT (CREATED_AT, END_AT, START_AT, UPDATED_AT, COACH, ID, STUDENT, CREATED_BY, UPDATED_BY, STATUS,
-                  CLASS_ID)
+                  CLASS_ID, COACH_DELETED, STUDENT_DELETED)
 SELECT null,
        TIMESTAMPADD(HOUR, (ROW_NUMBER() OVER (ORDER BY s.id) - 1) + 8,
                     DATEADD('DAY', 1, CURRENT_DATE) + TIME '00:00:00'),
@@ -41,5 +41,7 @@ SELECT null,
        null,
        null,
        'AVAILABLE',
-       UUID()
+       UUID(),
+       false,
+       false
 FROM student s;

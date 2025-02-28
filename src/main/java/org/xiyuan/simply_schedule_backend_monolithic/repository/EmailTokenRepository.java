@@ -13,5 +13,4 @@ public interface EmailTokenRepository extends JpaRepository<EmailToken, UUID> {
     Optional<EmailToken> findEmailTokenBySlot(Slot Slot);
 
     void deleteEmailTokenBySlot(Slot slot);
-
 }

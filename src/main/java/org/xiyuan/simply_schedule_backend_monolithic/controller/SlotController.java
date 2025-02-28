@@ -16,8 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
+import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.SlotDto;
+import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
 import org.xiyuan.simply_schedule_backend_monolithic.service.SlotService;
 
 import java.util.List;
@@ -56,8 +58,8 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId) {
-        List<Slot> slots = slotService.getSlotsByStudentIdAndCoachId(studentId, coachId);
+    public ResponseEntity<List<SlotDto>> getSlotsByStudentIdAndCoachId(@PathVariable UUID studentId, @PathVariable UUID coachId, @CurrentUser User user) {
+        List<Slot> slots = slotService.getSlotsByStudentIdAndCoachId(studentId, coachId, user);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         return new ResponseEntity<>(slotDtos, HttpStatus.OK);
     }
@@ -84,8 +86,8 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<List<SlotDto>> getSlotsByCoachId(@PathVariable UUID coachId) {
-        List<Slot> slots = slotService.getSlotsByCoachId(coachId);
+    public ResponseEntity<List<SlotDto>> getSlotsByCoachId(@PathVariable UUID coachId, @CurrentUser User user) {
+        List<Slot> slots = slotService.getSlotsByCoachId(coachId, user);
         List<SlotDto> slotDtos = slots.stream().map(slot -> modelMapper.map(slot, SlotDto.class)).toList();
         return new ResponseEntity<>(slotDtos, HttpStatus.OK);
     }
@@ -137,8 +139,8 @@ public class SlotController {
             )
     }
     )
-    public ResponseEntity<String> deleteSlotById(@PathVariable UUID id) {
-        slotService.deleteSlotById(id);
+    public ResponseEntity<String> deleteSlotById(@PathVariable UUID id, @CurrentUser User user) {
+        slotService.deleteSlotById(id, user);
         return new ResponseEntity<>("Deleted slot successfully", HttpStatus.OK);
     }
 
@@ -191,35 +193,4 @@ public class SlotController {
         Slot slot = slotService.updateSlotStatus(id, status);
         return new ResponseEntity<>(modelMapper.map(slot, SlotDto.class), HttpStatus.OK);
     }
-
-//    @GetMapping("/{id}/token/{token}")
-//    @Operation(
-//            summary = "Update a time slot's status via email"
-//    )
-//    @ApiResponses({
-//            @ApiResponse(
-//                    responseCode = "200",
-//                    description = "Time slot updated"
-//            ),
-//            @ApiResponse(
-//                    responseCode = "404",
-//                    description = "Time slot not found"
-//            ),
-//            @ApiResponse(
-//                    responseCode = "500",
-//                    description = "HTTP Status Internal Server Error",
-//                    content = @Content(
-//                            schema = @Schema(implementation = ErrorDto.class)
-//                    )
-//            )
-//    }
-//    )
-//    public String updateSlotStatusViaEmail(@PathVariable UUID id, @PathVariable String token, @RequestParam SlotStatus status, Model model) {
-//        String message = slotService.updateSlotStatusViaEmail(id, token, status);
-//        if (message != null) {
-//            model.addAttribute("message", message);
-//            return "action-success";
-//        }
-//        return "token-invalid";
-//    }
 }

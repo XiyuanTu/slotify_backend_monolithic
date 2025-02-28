@@ -57,4 +57,18 @@ public class SlotDto {
     private LocalDateTime endAt;
 
     private SlotStatus status;
+
+    @Schema(
+            description = "If the student has deleted the cancelled slot",
+            example = "false"
+    )
+    @NotNull(message = "StudentDeleted can't be empty")
+    private Boolean studentDeleted = false;
+
+    @Schema(
+            description = "If the coach has deleted the cancelled slot",
+            example = "false"
+    )
+    @NotNull(message = "CoachDeleted can't be empty")
+    private Boolean coachDeleted = false;
 }

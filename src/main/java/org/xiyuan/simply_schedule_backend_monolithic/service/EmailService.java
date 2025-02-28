@@ -11,6 +11,7 @@ public interface EmailService {
     @Async
     void sendEmail(Slot slot, String baseUrl) throws MessagingException, IOException;
 
+    @Async
     void sendOpenHourUpdateEmail(Coach coach) throws MessagingException, IOException;
 
 //    void sendAppointmentConfirmedEmail2Coach(String to, String subject, String body);
