@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.SlotStatus;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,5 +36,7 @@ public interface SlotRepository extends JpaRepository<Slot, UUID> {
     Optional<List<Object[]>> findAvailableStudents(
             @Param("coachId") UUID coachId
     );
+
+    void deleteSlotsByEndAtBefore(LocalDateTime cutoffDate);
 
 }

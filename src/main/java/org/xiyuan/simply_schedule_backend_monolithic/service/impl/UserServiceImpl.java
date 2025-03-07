@@ -1,5 +1,6 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -89,6 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void handleGoogleSignIn(final String jwt) {
         User user = googleAuthTokenVerifier.verifyGoogleAuthToken(jwt)
                 .orElseThrow(() -> new AccessDeniedException("Failed to validate JWT."));
@@ -166,6 +168,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Coach deleteStudentsFromCoach(UUID coachId, List<UUID> studentIds) {
         Coach coach = coachRepository.findById(coachId).orElseThrow(() -> new ResourceNotFoundException("Coach", "id", coachId.toString()));
         coach.getStudents().removeIf(student -> studentIds.contains(student.getId()));

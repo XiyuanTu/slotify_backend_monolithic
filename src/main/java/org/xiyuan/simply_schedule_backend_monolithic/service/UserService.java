@@ -1,6 +1,6 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service;
 
-import jakarta.transaction.Transactional;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
@@ -16,6 +16,8 @@ public interface UserService {
     Student getStudentById(UUID studentId);
 
     Coach getCoachById(UUID coachId);
+
+    @CanIgnoreReturnValue
     Student getStudentByEmail(String email);
 
     Set<Student> getStudentsByCoachId(UUID coachId);
@@ -30,7 +32,6 @@ public interface UserService {
 
     void deleteStudentByEmail(String email);
 
-    @Transactional
     void handleGoogleSignIn(final String jwt);
 
     User getUserFromJwt(JwtAuthenticationToken principal);
@@ -43,6 +44,5 @@ public interface UserService {
 
     Student updateStudent(StudentDto studentDto);
 
-    @Transactional
     Coach deleteStudentsFromCoach(UUID coachId, List<UUID> studentIds);
 }

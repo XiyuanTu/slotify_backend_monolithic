@@ -2,6 +2,7 @@ package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.EmailToken;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.Slot;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.EmailTokenRepository;
@@ -39,6 +40,7 @@ public class EmailTokenServiceImpl implements EmailTokenService {
     }
 
     @Override
+    @Transactional
     public void deleteTokenBySlot(Slot slot) {
         emailTokenRepository.deleteEmailTokenBySlot(slot);
     }

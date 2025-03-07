@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -61,6 +62,7 @@ public class EmailServiceImpl implements EmailService {
     private String coachFrontendUrl;
 
     @Override
+    @Async
     public void sendEmail(Slot slot, String baseUrl) throws MessagingException, IOException {
         switch (slot.getStatus()) {
             case PENDING -> sendConfirmationEmail(slot, baseUrl);
@@ -72,6 +74,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    @Async
     public void sendOpenHourUpdateEmail(Coach coach) throws MessagingException, IOException {
         Set<Student> students = coach.getStudents();
         for (Student student : students) {

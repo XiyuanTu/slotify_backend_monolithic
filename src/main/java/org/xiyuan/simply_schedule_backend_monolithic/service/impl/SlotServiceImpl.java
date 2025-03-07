@@ -1,5 +1,6 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -39,6 +40,7 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
+    @Transactional
     public List<Slot> createSlots(List<Slot> slots) {
         // All slots should be in the same status. If not AVAILABLE, then it should already have a class id
         if (!slots.isEmpty() && slots.get(0).getStatus().equals(SlotStatus.AVAILABLE)) {
@@ -69,6 +71,7 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
+    @Transactional
     public void deleteSlotById(UUID id, User user) {
         Slot slot = getSlotById(id);
 
@@ -119,6 +122,7 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
+    @Transactional
     public void deleteSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId) {
         slotRepository.deleteSlotsByStudent_IdAndCoach_IdAndStatus(studentId, coachId, SlotStatus.AVAILABLE);
     }
