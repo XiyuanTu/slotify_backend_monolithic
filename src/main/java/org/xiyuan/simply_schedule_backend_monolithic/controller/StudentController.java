@@ -12,19 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.ErrorDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.user.StudentDto;
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/api/v1/student", produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -60,7 +54,7 @@ public class StudentController {
     }
     )
     public ResponseEntity<List<StudentDto>> getStudents(@PathVariable UUID coachId) {
-        List<Student> students = userService.getStudentsByCoachId(coachId);
+        Set<Student> students = userService.getStudentsByCoachId(coachId);
         List<StudentDto> studentDtos = students.stream().map(student -> modelMapper.map(student, StudentDto.class)).toList();
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
     }
@@ -124,5 +118,86 @@ public class StudentController {
         Student student = userService.getStudentById(studentId);
         StudentDto studentDto = modelMapper.map(student, StudentDto.class);
         return new ResponseEntity<>(studentDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("")
+    @Operation(
+            summary = "Delete students"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Students deleted"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Students not found"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorDto.class)
+                    )
+            )
+    }
+    )
+    public ResponseEntity<String> deleteStudents(@RequestBody List<UUID> ids) {
+        userService.deleteStudents(ids);
+        return new ResponseEntity<>("Deleted students successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/{studentId}")
+    @Operation(
+            summary = "Add coach to student"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Coach added"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Coach not found/Invalid code"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorDto.class)
+                    )
+            )
+    }
+    )
+    public ResponseEntity<String> addCoachToStudent(@PathVariable UUID studentId, @RequestParam("invitation-code") String invitationCode) {
+        userService.addCoachToStudent(studentId, invitationCode);
+        return new ResponseEntity<>("Coach added successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("")
+    @Operation(
+            summary = "Update student"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Student updated"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Student not found"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorDto.class)
+                    )
+            )
+    }
+    )
+    public ResponseEntity<StudentDto> updateStudent(@RequestBody StudentDto studentDto) {
+        Student student = userService.updateStudent(studentDto);
+        return new ResponseEntity<>(modelMapper.map(student, StudentDto.class), HttpStatus.OK);
     }
 }

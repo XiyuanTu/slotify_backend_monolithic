@@ -15,8 +15,8 @@ import org.xiyuan.simply_schedule_backend_monolithic.payload.user.CoachDto;
 import org.xiyuan.simply_schedule_backend_monolithic.payload.user.StudentDto;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -29,17 +29,27 @@ public class AppConfig {
         // Custom mapping for Coach to CoachDto
         modelMapper.typeMap(Coach.class, CoachDto.class).addMappings(mapper ->
                 mapper.using(context -> {
-                    List<Student> students = (List<Student>) context.getSource(); // Explicit cast
+                    Set<Student> students = (Set<Student>) context.getSource(); // Explicit cast
                     if (students == null || students.isEmpty()) {
-                        return Collections.emptyList();
+                        return Collections.emptySet();
                     }
-                    return students.stream().map(Student::getId).collect(Collectors.toList());
+                    return students.stream().map(Student::getId).collect(Collectors.toSet());
                 }).map(Coach::getStudents, CoachDto::setStudentIds)
         );
 
         // Custom mapping for Student to StudentDto
-        modelMapper.typeMap(Student.class, StudentDto.class).addMappings(mapper ->
-                mapper.map(src -> src.getCoach().getId(), StudentDto::setCoachId)
+        modelMapper.typeMap(Student.class, StudentDto.class)
+                .addMappings(mapper ->
+                        mapper.map(src -> src.getDefaultCoach().getId(), StudentDto::setDefaultCoachId)
+                )
+                .addMappings(mapper ->
+                        mapper.using(context -> {
+                            Set<Coach> coaches = (Set<Coach>) context.getSource();
+                            if (coaches == null || coaches.isEmpty()) {
+                                return Collections.emptySet();
+                            }
+                            return coaches.stream().map(Coach::getId).collect(Collectors.toSet());
+                        }).map(Student::getCoaches, StudentDto::setCoachIds)
         );
 
         // Custom mapping for Slot to SlotDto

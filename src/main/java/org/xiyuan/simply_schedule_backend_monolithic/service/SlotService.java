@@ -17,6 +17,7 @@ public interface SlotService {
 
     List<Slot> createSlots(List<Slot> slots);
 
+    @Transactional
     void deleteSlotById(UUID id, User user);
 
     Slot updateSlotStatus(UUID id, SlotStatus status);

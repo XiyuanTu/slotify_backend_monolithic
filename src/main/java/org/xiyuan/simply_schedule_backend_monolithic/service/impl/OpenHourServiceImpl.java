@@ -23,7 +23,7 @@ public class OpenHourServiceImpl implements OpenHourService {
 
     @Override
     public List<OpenHour> getOpenHoursByCoachId(UUID coachId) {
-        return openHourRepository.findOpenHoursByCoachId(coachId).orElseThrow(() -> new ResourceNotFoundException("OpenHour", "coachId", String.valueOf(coachId)));
+        return openHourRepository.findOpenHoursByCoach_Id(coachId).orElseThrow(() -> new ResourceNotFoundException("OpenHour", "coachId", String.valueOf(coachId)));
     }
 
     @Override
@@ -51,6 +51,6 @@ public class OpenHourServiceImpl implements OpenHourService {
 
     @Override
     public void deleteOpenHoursByCoachId(UUID coachId) {
-        openHourRepository.deleteOpenHoursByCoachId(coachId);
+        openHourRepository.deleteOpenHoursByCoach_Id(coachId);
     }
 }

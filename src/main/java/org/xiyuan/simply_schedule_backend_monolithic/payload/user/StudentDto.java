@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.Location;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -17,7 +18,8 @@ import java.util.UUID;
         name = "Student"
 )
 public class StudentDto extends UserDto {
-    private UUID coachId;
+    private UUID defaultCoachId;
+    private Set<UUID> coachIds;
     private Location location;
     private Long numOfClassCanBeScheduled;
 }

@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Repository
 public interface OpenHourRepository extends JpaRepository<OpenHour, UUID> {
-    Optional<List<OpenHour>> findOpenHoursByCoachId(UUID coachId);
+    Optional<List<OpenHour>> findOpenHoursByCoach_Id(UUID coachId);
 
     @Transactional
-    void deleteOpenHoursByCoachId(UUID coachId);
+    void deleteOpenHoursByCoach_Id(UUID coachId);
 }

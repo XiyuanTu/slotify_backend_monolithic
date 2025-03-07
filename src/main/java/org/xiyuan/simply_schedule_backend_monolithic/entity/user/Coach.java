@@ -1,29 +1,34 @@
 package org.xiyuan.simply_schedule_backend_monolithic.entity.user;
 
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "students")
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Coach extends User {
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL)
-    private List<Student> students;
 
-    public List<Student> getStudents() {
-        return this.students == null ? new ArrayList<>() : students;
+    @Column(name = "invitation_code", nullable = false)
+    private String invitationCode;
+
+    @ManyToMany
+    @JoinTable(
+            name = "coach_student",
+            joinColumns = @JoinColumn(name = "coach"),
+            inverseJoinColumns = @JoinColumn(name = "student")
+    )
+    private Set<Student> students;
+
+
+    public Set<Student> getStudents() {
+        return this.students == null ? new HashSet<>() : students;
     }
 }

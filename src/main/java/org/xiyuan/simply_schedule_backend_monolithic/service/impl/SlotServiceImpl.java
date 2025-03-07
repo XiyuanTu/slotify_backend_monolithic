@@ -1,6 +1,5 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,7 +26,7 @@ public class SlotServiceImpl implements SlotService {
 
     @Override
     public List<Slot> getSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId, User user) {
-        return slotRepository.findSlotsByStudentIdAndCoachId(studentId, coachId)
+        return slotRepository.findSlotsByStudent_IdAndCoach_Id(studentId, coachId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot", "studentId/coachId", studentId + "/" + coachId))
                 .stream()
                 .filter(slot -> user.getSource().equals(FrontendSource.ADMIN) ? !slot.getCoachDeleted() : !slot.getStudentDeleted())
@@ -62,7 +61,7 @@ public class SlotServiceImpl implements SlotService {
 
     @Override
     public List<Slot> getSlotsByCoachId(UUID coachId, User user) {
-        return slotRepository.findSlotsByCoachId(coachId)
+        return slotRepository.findSlotsByCoach_Id(coachId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot", "coachId", String.valueOf(coachId)))
                 .stream()
                 .filter(slot -> user.getSource().equals(FrontendSource.ADMIN) ? !slot.getCoachDeleted() : !slot.getStudentDeleted())
@@ -70,11 +69,10 @@ public class SlotServiceImpl implements SlotService {
     }
 
     @Override
-    @Transactional
     public void deleteSlotById(UUID id, User user) {
         Slot slot = getSlotById(id);
 
-        // APPOINTMENT slots can be deleted. Therefore, it indicates the user doesn't get the latest status
+        // Deletion can be triggered by mistake for APPOINTMENT slots when the user doesn't get the latest status
         if (slot.getStatus().equals(SlotStatus.APPOINTMENT)) {
             throw new SlotStatusStaleException(id);
         }
@@ -122,7 +120,7 @@ public class SlotServiceImpl implements SlotService {
 
     @Override
     public void deleteSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId) {
-        slotRepository.deleteSlotsByStudentIdAndCoachIdAndStatus(studentId, coachId, SlotStatus.AVAILABLE);
+        slotRepository.deleteSlotsByStudent_IdAndCoach_IdAndStatus(studentId, coachId, SlotStatus.AVAILABLE);
     }
 
     @Override

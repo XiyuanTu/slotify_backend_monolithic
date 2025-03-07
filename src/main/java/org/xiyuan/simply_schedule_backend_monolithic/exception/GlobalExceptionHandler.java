@@ -47,6 +47,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ErrorDto, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(CoachAlreadyAddedException.class)
+    public ResponseEntity<ErrorDto> handleCoachAlreadyAddedException(CoachAlreadyAddedException coachAlreadyAddedException, WebRequest webRequest) {
+        ErrorDto ErrorDto = new ErrorDto(LocalDateTime.now(), webRequest.getDescription(false), coachAlreadyAddedException.getMessage());
+        return new ResponseEntity<>(ErrorDto, HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDto> handleRuntimeException(Exception exception, WebRequest webRequest) {
         ErrorDto errorDto = new ErrorDto(LocalDateTime.now(),  webRequest.getDescription(false), exception.getMessage());

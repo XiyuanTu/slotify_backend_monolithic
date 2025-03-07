@@ -40,9 +40,9 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +73,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendOpenHourUpdateEmail(Coach coach) throws MessagingException, IOException {
-        List<Student> students = coach.getStudents();
+        Set<Student> students = coach.getStudents();
         for (Student student : students) {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);

@@ -14,4 +14,6 @@ public interface CoachRepository extends JpaRepository<Coach, UUID> {
 
     @Transactional
     void deleteByEmail(String email);
+
+    Optional<Coach> findByInvitationCode(String invitationCode);
 }

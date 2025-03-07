@@ -7,16 +7,21 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.Location;
 
-@EqualsAndHashCode(callSuper = true)
+import java.util.Set;
+
+@EqualsAndHashCode(callSuper = true, exclude = "coaches")
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 public class Student extends User {
+
     @ManyToOne
-    @JoinColumn(name = "coach", nullable = false)
-    // for now, each student has only one coach
-    private Coach coach;
+    @JoinColumn(name = "default_coach")
+    private Coach defaultCoach;
+
+    @ManyToMany(mappedBy = "students")
+    private Set<Coach> coaches;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "location", nullable = false)

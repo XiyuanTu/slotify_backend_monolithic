@@ -33,6 +33,7 @@ import org.xiyuan.simply_schedule_backend_monolithic.security.CurrentUser;
 public class UserController {
     private final ModelMapper modelMapper;
 
+
     @GetMapping("")
     @Operation(
             summary = "Get logged in user by email"

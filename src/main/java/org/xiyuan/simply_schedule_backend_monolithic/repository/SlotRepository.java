@@ -14,11 +14,11 @@ import java.util.UUID;
 @Repository
 public interface SlotRepository extends JpaRepository<Slot, UUID> {
 
-    Optional<List<Slot>> findSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId);
+    Optional<List<Slot>> findSlotsByStudent_IdAndCoach_Id(UUID studentId, UUID coachId);
 
-    Optional<List<Slot>> findSlotsByCoachId(UUID coachId);
+    Optional<List<Slot>> findSlotsByCoach_Id(UUID coachId);
 
-    void deleteSlotsByStudentIdAndCoachIdAndStatus(UUID studentId, UUID coachId, SlotStatus status);
+    void deleteSlotsByStudent_IdAndCoach_IdAndStatus(UUID studentId, UUID coachId, SlotStatus status);
 
     @Query("""
                 SELECT s.student, COUNT(DISTINCT s.classId)
@@ -35,4 +35,5 @@ public interface SlotRepository extends JpaRepository<Slot, UUID> {
     Optional<List<Object[]>> findAvailableStudents(
             @Param("coachId") UUID coachId
     );
+
 }

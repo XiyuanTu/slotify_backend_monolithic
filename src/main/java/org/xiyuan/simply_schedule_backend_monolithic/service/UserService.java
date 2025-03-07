@@ -1,12 +1,15 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
+import org.xiyuan.simply_schedule_backend_monolithic.payload.user.StudentDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public interface UserService {
@@ -15,7 +18,7 @@ public interface UserService {
     Coach getCoachById(UUID coachId);
     Student getStudentByEmail(String email);
 
-    List<Student> getStudentsByCoachId(UUID coachId);
+    Set<Student> getStudentsByCoachId(UUID coachId);
 
     Map<Student, Long> getAvailableStudents(UUID coachId);
 
@@ -27,7 +30,19 @@ public interface UserService {
 
     void deleteStudentByEmail(String email);
 
+    @Transactional
     void handleGoogleSignIn(final String jwt);
 
     User getUserFromJwt(JwtAuthenticationToken principal);
+
+    Coach updateCoachById(UUID id, Coach coach);
+
+    void deleteStudents(List<UUID> ids);
+
+    void addCoachToStudent(UUID studentId, String invitationCode);
+
+    Student updateStudent(StudentDto studentDto);
+
+    @Transactional
+    Coach deleteStudentsFromCoach(UUID coachId, List<UUID> studentIds);
 }
