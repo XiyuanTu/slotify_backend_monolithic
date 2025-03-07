@@ -1,6 +1,8 @@
 package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.OpenHour;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
@@ -16,7 +18,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class OpenHourServiceImpl implements OpenHourService {
-
+    private static final Logger logger = LoggerFactory.getLogger(OpenHourServiceImpl.class);
     private final OpenHourRepository openHourRepository;
     private final CoachRepository coachRepository;
     private final EmailService emailService;
@@ -38,7 +40,7 @@ public class OpenHourServiceImpl implements OpenHourService {
         try {
             emailService.sendOpenHourUpdateEmail(coach);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return savedOpenHours;
     }

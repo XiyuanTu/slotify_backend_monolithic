@@ -2,6 +2,8 @@ package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final CoachRepository coachRepository;
     private final SlotRepository slotRepository;
     private final GoogleAuthTokenVerifier googleAuthTokenVerifier;
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public Student getStudentById(UUID studentId) {
@@ -124,7 +127,7 @@ public class UserServiceImpl implements UserService {
             coach.setSource(FrontendSource.ADMIN);
             return coach;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
         return null;
     }

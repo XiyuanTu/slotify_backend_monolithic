@@ -2,6 +2,8 @@ package org.xiyuan.simply_schedule_backend_monolithic.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.FrontendSource;
@@ -24,6 +26,7 @@ public class SlotServiceImpl implements SlotService {
     private final EmailService emailService;
     private final EmailTokenService emailTokenService;
     private final SlotRepository slotRepository;
+    private static final Logger logger = LoggerFactory.getLogger(SlotServiceImpl.class);
 
     @Override
     public List<Slot> getSlotsByStudentIdAndCoachId(UUID studentId, UUID coachId, User user) {
@@ -54,7 +57,7 @@ public class SlotServiceImpl implements SlotService {
                 try {
                     emailService.sendEmail(slot, baseUrl);
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    logger.error(e.getMessage());
                 }
             }
         });
@@ -115,7 +118,7 @@ public class SlotServiceImpl implements SlotService {
         try {
             emailService.sendEmail(updatedSlot, baseUrl);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
 
         return updatedSlot;

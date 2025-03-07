@@ -18,6 +18,8 @@ import net.fortuna.ical4j.model.property.Organizer;
 import net.fortuna.ical4j.util.RandomUidGenerator;
 import net.fortuna.ical4j.util.UidGenerator;
 import org.apache.commons.text.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -48,6 +50,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
+    private static final Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
     private final EmailTokenService emailTokenService;
     private final UserService userService;
     private final TemplateEngine templateEngine;
@@ -69,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
             case APPOINTMENT -> sendAppointmentEmail(slot, baseUrl);
             case REJECTED -> sendRejectedEmail(slot);
             case CANCELLED -> sendCancelledEmail(slot);
-            default -> System.out.println("unexpected status");
+            default -> logger.error("unexpected status");
         }
     }
 
