@@ -1,11 +1,13 @@
 package org.xiyuan.simply_schedule_backend_monolithic.entity.user;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.xiyuan.simply_schedule_backend_monolithic.constant.Location;
 
 import java.util.Set;
 
@@ -22,8 +24,4 @@ public class Student extends User {
 
     @ManyToMany(mappedBy = "students")
     private Set<Coach> coaches;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "location", nullable = false)
-    private Location location;
 }

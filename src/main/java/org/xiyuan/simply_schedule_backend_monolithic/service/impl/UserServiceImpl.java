@@ -4,11 +4,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.xiyuan.simply_schedule_backend_monolithic.constant.FrontendSource;
-import org.xiyuan.simply_schedule_backend_monolithic.constant.Location;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Coach;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.Student;
 import org.xiyuan.simply_schedule_backend_monolithic.entity.user.User;
@@ -18,7 +17,6 @@ import org.xiyuan.simply_schedule_backend_monolithic.payload.user.StudentDto;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.CoachRepository;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.SlotRepository;
 import org.xiyuan.simply_schedule_backend_monolithic.repository.StudentRepository;
-import org.xiyuan.simply_schedule_backend_monolithic.security.GoogleAuthTokenVerifier;
 import org.xiyuan.simply_schedule_backend_monolithic.service.UserService;
 
 import java.util.*;
@@ -30,8 +28,12 @@ public class UserServiceImpl implements UserService {
     private final StudentRepository studentRepository;
     private final CoachRepository coachRepository;
     private final SlotRepository slotRepository;
-    private final GoogleAuthTokenVerifier googleAuthTokenVerifier;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @Value("${cognito.client_id.student}")
+    private String CLIENT_ID_STUDENT;
+    @Value("${cognito.client_id.coach}")
+    private String CLIENT_ID_COACH;
 
     @Override
     public Student getStudentById(UUID studentId) {
@@ -94,42 +96,51 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void handleGoogleSignIn(final String jwt) {
-        User user = googleAuthTokenVerifier.verifyGoogleAuthToken(jwt)
-                .orElseThrow(() -> new AccessDeniedException("Failed to validate JWT."));
-        String email = user.getEmail();
-        if (FrontendSource.CLIENT.equals(user.getSource())) {
-            Student student = (Student) user;
-            student.setLocation(Location.MILPITAS);
-            studentRepository.findByEmail(email).orElseGet(() -> studentRepository.saveAndFlush(student));
+    public void handleGoogleSignIn(Jwt jwt) {
+        Map<String, Object> claims = jwt.getClaims();
+        String email = (String) claims.get("email");
+        String name = (String) claims.get("name");
+        String picture = (String) claims.get("picture");
+        List<String> aud = (List<String>) claims.get("aud");
+
+        if (CLIENT_ID_STUDENT.equals(aud.get(0))) {
+            studentRepository.findByEmail(email).orElseGet(() -> {
+                Student student = new Student();
+                student.setEmail(email);
+                student.setName(name);
+                student.setPicture(picture);
+                return studentRepository.saveAndFlush(student);
+            });
             return;
         }
-        Coach coach = (Coach) user;
-        Random rand = new Random();
-        coach.setInvitationCode(Integer.toString(100000 + rand.nextInt(900000)));
-        coachRepository.findByEmail(email).orElseGet(() -> coachRepository.saveAndFlush(coach));
+
+        coachRepository.findByEmail(email).orElseGet(() -> {
+            Coach coach = new Coach();
+            coach.setEmail(email);
+            coach.setName(name);
+            coach.setPicture(picture);
+            Random rand = new Random();
+            coach.setInvitationCode(Integer.toString(100000 + rand.nextInt(900000)));
+            return coachRepository.saveAndFlush(coach);
+        });
     }
 
     @Override
-    public User getUserFromJwt(JwtAuthenticationToken principal) {
-        try {
-            User user = googleAuthTokenVerifier.verifyGoogleAuthToken(principal.getToken().getTokenValue())
-                    .orElseThrow(() -> new RuntimeException("Failed to validate JWT."));
-            String email = user.getEmail();
-            if (FrontendSource.CLIENT.equals(user.getSource())) {
-                Student student = studentRepository.findByEmail(email)
-                        .orElseThrow(() -> new ResourceNotFoundException("Student", "Email", email));
-                student.setSource(FrontendSource.CLIENT);
-                return student;
-            }
-            Coach coach = coachRepository.findByEmail(email)
-                    .orElseThrow(() -> new ResourceNotFoundException("Coach", "Email", email));
-            coach.setSource(FrontendSource.ADMIN);
-            return coach;
-        } catch (Exception e) {
-            logger.error(e.getMessage());
+    public User getUserFromJwt(Jwt jwt) {
+        Map<String, Object> claims = jwt.getClaims();
+        String email = (String) claims.get("email");
+        List<String> aud = (List<String>) claims.get("aud");
+
+        if (CLIENT_ID_STUDENT.equals(aud.get(0))) {
+            Student student = studentRepository.findByEmail(email)
+                    .orElseThrow(() -> new ResourceNotFoundException("Student", "Email", email));
+            student.setSource(FrontendSource.CLIENT);
+            return student;
         }
-        return null;
+        Coach coach = coachRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Coach", "Email", email));
+        coach.setSource(FrontendSource.ADMIN);
+        return coach;
     }
 
     @Override

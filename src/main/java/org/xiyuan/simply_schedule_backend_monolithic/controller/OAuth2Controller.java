@@ -3,8 +3,8 @@ package org.xiyuan.simply_schedule_backend_monolithic.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +28,11 @@ public class OAuth2Controller {
             method = RequestMethod.POST,
             produces = {"application/json"}
     )
-    public ResponseEntity<Map<String, Object>> createGoogleUser() {
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        String bearerToken = jwtAuthenticationToken.getToken().getTokenValue();
+    public ResponseEntity<Map<String, Object>> createGoogleUser(@AuthenticationPrincipal Jwt jwt) {
         try {
-            userService.handleGoogleSignIn(bearerToken);
+            userService.handleGoogleSignIn(jwt);
             return new ResponseEntity<>(Map.of(
-                    "token", bearerToken
+                    "token", jwt.getTokenValue()
             ), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of(
@@ -42,5 +40,4 @@ public class OAuth2Controller {
             ), HttpStatus.BAD_REQUEST);
         }
     }
-
 }
